@@ -1,7 +1,8 @@
-# ai-langchain4j-spring
+# Generative AI development in Java
 This project contains the codes to build an application that support AI chatbot in the context of uploaded pdf file.
 
 Technologies:
+- Java 17+
 - Spring boot
 - langchain4j for AI
 - Websocket
