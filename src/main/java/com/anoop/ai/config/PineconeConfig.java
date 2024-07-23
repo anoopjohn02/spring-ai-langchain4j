@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class PineconeConfig {
 
+    /**
+     * Unable to insert metadata using
+     */
+
     @Value("${pinecone.db.api.key}")
     private String apikey;
 

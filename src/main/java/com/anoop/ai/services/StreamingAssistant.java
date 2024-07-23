@@ -14,5 +14,6 @@ public interface StreamingAssistant {
              If you don't know answer, just tell it.
              """
     )
-    TokenStream chat(@MemoryId @V("name") String memoryId, @UserMessage String userMessage);
+    TokenStream chat(@MemoryId @V("name") String memoryId,
+                     @UserMessage String userMessage);
 }

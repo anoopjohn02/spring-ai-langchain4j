@@ -65,7 +65,7 @@ public class OpenAIServiceImpl implements OpenAIService{
     }
 
     private void tokenReceived(String userId, UUID messageId, String token) {
-        log.info(token);
+        log.debug(token);
         AIChatMessage message = AIChatMessage.builder()
                 .messageId(messageId)
                 .content(token)

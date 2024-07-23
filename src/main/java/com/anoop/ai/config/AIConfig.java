@@ -1,5 +1,6 @@
 package com.anoop.ai.config;
 
+import com.anoop.ai.data.vector.DocumentQueryBuilder;
 import com.anoop.ai.services.Assistant;
 import com.anoop.ai.services.StreamingAssistant;
 import dev.langchain4j.data.document.DocumentSplitter;
@@ -42,6 +43,7 @@ public class AIConfig {
     private final StreamingChatLanguageModel streamingChatLanguageModel;
     private final ChatMemoryStore chatMemoryStore;
     private final EmbeddingStore<TextSegment> embeddingStore;
+    private final DocumentQueryBuilder documentQueryBuilder;
 
     @Value("${langchain4j.open-ai.chat-model.api-key}")
     private String apiKey;
@@ -78,6 +80,8 @@ public class AIConfig {
         return OpenAiEmbeddingModel.builder()
                 .apiKey(apiKey)
                 .modelName("text-embedding-ada-002")
+                .logRequests(true)
+                .logResponses(true)
                 .build();
     }
 
@@ -85,7 +89,7 @@ public class AIConfig {
     public RetrievalAugmentor retrievalAugmentor() {
         return DefaultRetrievalAugmentor.builder()
                 .contentRetriever(retriever())
-                .contentInjector(contentInjector())
+                //.contentInjector(contentInjector())
                 .build();
     }
 
@@ -102,11 +106,8 @@ public class AIConfig {
         return EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
                 .embeddingModel(embeddingModel())
-                //.filter(metadataKey("userId").isEqualTo("anoop"))
-                .dynamicFilter(query -> {
-                    String userId = (String) query.metadata().chatMemoryId();
-                    return metadataKey("userId").isEqualTo(userId);
-                })
+                .maxResults(10)
+                .dynamicFilter(documentQueryBuilder::filter)
                 .build();
     }
 
