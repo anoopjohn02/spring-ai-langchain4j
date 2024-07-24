@@ -16,6 +16,9 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -56,7 +59,17 @@ public class FilesStorageService {
     }
 
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(root.toFile());
+        try {
+            List<Boolean> deleteVector = loadAll()
+                    .map(path -> documentService.deleteByFile(path.getFileName().toString()))
+                    .collect(Collectors.toList());
+            if(Arrays.asList(deleteVector).contains(Boolean.valueOf(false))){
+                throw new RuntimeException("Deletion failed!");
+            }
+            FileSystemUtils.deleteRecursively(root.toFile());
+        } catch (Exception exception) {
+            throw new RuntimeException("Could not delete files!");
+        }
     }
 
     public Stream<Path> loadAll() throws IOException {

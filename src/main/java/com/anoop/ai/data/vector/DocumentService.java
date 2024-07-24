@@ -21,4 +21,10 @@ public class DocumentService {
         document.metadata().put("userId", userId);
         ingestor.ingest(document);
     }
+
+    public boolean deleteByFile(String fileName) {
+        String query = "where={'source':'"+fileName+"'}";
+        // TODO
+        return false;
+    }
 }
